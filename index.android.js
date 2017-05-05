@@ -10,17 +10,19 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  Button,
   View
 } from 'react-native';
 import dictionary from './data/dictionary'
 import appends from './reducers/appends'
 import prepends from './reducers/prepends'
 import PlayMessage from './components/PlayMessage'
+import HintsMessage from './components/HintsMessage'
 
 export default class LexicantApp extends Component {
   constructor(props) {
     super(props);
-    this.state = {word: '', prepend: '', append: ''};
+    this.state = {word: '', prepend: '', append: '', hint: false};
     this.dictionary = dictionary
     this.appends = appends(dictionary)
     this.prepends = prepends(dictionary)
@@ -53,6 +55,15 @@ export default class LexicantApp extends Component {
           prepend = {this.state.c_prepend}
           append = {this.state.c_append}
         />
+        <Button
+          onPress = {() => this.setState({hint: true})}
+          title="get hint"
+        />
+        <HintsMessage
+          hint = {this.state.hint}
+          prepends = {this.prepends[this.state.word]}
+          appends = {this.appends[this.state.word]}
+        />
         <Text style={styles.text}>
           {this.state.message}{"\n"}
         </Text>
@@ -78,6 +89,7 @@ export default class LexicantApp extends Component {
   }
 
   play(word) {
+    this.setState({hint: false})
     var next = ''
     if (word.length > 3 && this.dictionary.includes(word)) {
       this.setState({
