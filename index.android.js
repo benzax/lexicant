@@ -116,7 +116,7 @@ export default class LexicantApp extends Component {
         this.computerAppend('')
         return
       }
-      if (word.length > 3 && this.dictionary.includes(next)) { 
+      if (next.length > 3 && this.dictionary.includes(next)) { 
         this.setState({message: 'player won with ' + next})
         this.setState({word: ''})
       } else {
