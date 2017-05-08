@@ -58,9 +58,6 @@ export default class LexicantApp extends Component {
         <Text style={styles.text}>
           {this.state.message}{"\n"}
         </Text>
-        <Text style={styles.important_text}>
-          Letters so far: {this.state.word}
-        </Text>
       </View>
     );
   }

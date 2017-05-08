@@ -8,31 +8,47 @@ import {
 import PropTypes from 'prop-types'
 
 const Letters = ({letters, onPrepend, onAppend}) => {
-  return (
-    <View>
-      <Text style={styles.text}>
-        Add to the start:
-      </Text>
+  if (letters === "") {
+    return (
       <TextInput
+        style = {styles.input}
         value = ""
         onChangeText={(prepend) => onPrepend(prepend)}
       />
-      <Text style={styles.text}>
-        Add to end:
-      </Text>
-      <TextInput
-        value = ""
-        onChangeText={(append) => onAppend(append)}
-      />
-    </View>
-)}
+    )
+  } else {
+    return (
+      <View style={styles.view}>
+        <TextInput
+          style = {styles.input}
+          value = ""
+          onChangeText={(prepend) => onPrepend(prepend)}
+        />
+        <Text style={styles.text}>
+          {letters}
+        </Text>
+        <TextInput
+          style = {styles.input}
+          value = ""
+          onChangeText={(append) => onAppend(append)}
+        />
+      </View>
+  )}
+}
 
 const styles = StyleSheet.create({
-  text: {
-    fontSize: 15,
-    textAlign: 'center',
-    margin: 10,
+  view: {
+    flexDirection: 'row',
+    height: 20,
   },
+  text: {
+    flex: 0,
+    fontSize: 15,
+  },
+  input: {
+    flex: 0,
+    width: 30
+  }
 });
 
 Letters.propTypes = {
