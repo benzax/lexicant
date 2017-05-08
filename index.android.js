@@ -7,7 +7,6 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  TextInput,
   Button,
   View
 } from 'react-native';
@@ -16,6 +15,7 @@ import appends from './reducers/appends'
 import prepends from './reducers/prepends'
 import PlayMessage from './components/PlayMessage'
 import HintsMessage from './components/HintsMessage'
+import Letters from './components/Letters'
 
 export default class LexicantApp extends Component {
   constructor(props) {
@@ -24,24 +24,17 @@ export default class LexicantApp extends Component {
     this.dictionary = dictionary
     this.appends = appends(dictionary)
     this.prepends = prepends(dictionary)
+    this.onPrepend = this.onPrepend.bind(this)
+    this.onAppend = this.onAppend.bind(this)
   }
 
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>
-          Add to the start:
-        </Text>
-        <TextInput
-          value = ""
-          onChangeText={(prepend) => this.prepend(prepend)}
-        />
-        <Text style={styles.text}>
-          Add to end:
-        </Text>
-        <TextInput
-          value = ""
-          onChangeText={(append) => this.append(append)}
+        <Letters 
+          letters = {this.state.word}
+          onPrepend = {this.onPrepend}
+          onAppend = {this.onAppend}
         />
         <PlayMessage
           player = "You"
@@ -72,14 +65,14 @@ export default class LexicantApp extends Component {
     );
   }
 
-  prepend(letter) {
+  onPrepend(letter) {
     this.setState({prepend: letter})
     this.setState({append: ''})
     let word = letter + this.state.word
     this.play(word)
   }
   
-  append(letter) {
+  onAppend(letter) {
     this.setState({append: letter})
     this.setState({prepend: ''})
     let word = this.state.word + letter
