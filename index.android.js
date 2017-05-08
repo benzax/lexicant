@@ -98,7 +98,8 @@ export default class LexicantApp extends Component {
         this.computerPrepend(move)
       } else {
         this.setState({
-          message: 'computer challenged ' + word,
+          message: 'computer challenged ' + word +
+            '\ncomputer was thinking of ' + this.completion(this.state.word),
           word: ''
         })
         this.computerAppend('')
@@ -120,6 +121,24 @@ export default class LexicantApp extends Component {
 
   computerAppend(letter) {
     this.setState({c_prepend: '', c_append: letter})
+  }
+
+  completion(letters) {
+    let word = letters
+    while (!this.dictionary.includes(word) || word.length < 4) {
+      let apps = this.appends[word]
+      let preps = this.prepends[word]
+      if (apps && (!preps || Math.random() > .5)) {
+        let move = apps[Math.floor(Math.random()*apps.length)]
+        word = word + move
+      } else if (preps) {
+        let move = preps[Math.floor(Math.random()*preps.length)]
+        word = move + word
+      } else { // shouldn't get here
+        return "letters"
+      }
+    }
+    return word
   }
 }
 
