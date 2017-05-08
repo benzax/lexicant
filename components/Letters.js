@@ -8,22 +8,18 @@ import {
 import PropTypes from 'prop-types'
 
 const Letters = ({letters, onPrepend, onAppend}) => {
+  let prepend = 
+    <TextInput
+      style = {styles.input}
+      value = ""
+      onChangeText={(prepend) => onPrepend(prepend)}
+    />
   if (letters === "") {
-    return (
-      <TextInput
-        style = {styles.input}
-        value = ""
-        onChangeText={(prepend) => onPrepend(prepend)}
-      />
-    )
+    return prepend
   } else {
     return (
       <View style={styles.view}>
-        <TextInput
-          style = {styles.input}
-          value = ""
-          onChangeText={(prepend) => onPrepend(prepend)}
-        />
+        {prepend}
         <Text style={styles.text}>
           {letters}
         </Text>
