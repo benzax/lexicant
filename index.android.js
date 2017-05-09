@@ -157,11 +157,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     margin: 10,
   },
-  important_text: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
 });
 
 AppRegistry.registerComponent('LexicantApp', () => LexicantApp);

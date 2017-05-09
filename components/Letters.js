@@ -40,10 +40,11 @@ const styles = StyleSheet.create({
   text: {
     flex: 0,
     fontSize: 15,
+    fontWeight: 'bold',
   },
   input: {
     flex: 0,
-    width: 30
+    width: 30,
   }
 });
 
