@@ -46,10 +46,13 @@ export default class LexicantApp extends Component {
           prepend = {this.state.c_prepend}
           append = {this.state.c_append}
         />
-        <Button
-          onPress = {() => this.setState({hint: true})}
-          title="get hint"
-        />
+        {
+          this.state.word === "" ? null :
+            <Button
+              onPress = {() => this.setState({hint: true})}
+              title="get hint"
+            />
+        }
         <HintsMessage
           hint = {this.state.hint}
           prepends = {this.prepends[this.state.word]}
