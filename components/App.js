@@ -19,7 +19,14 @@ import Letters from './Letters'
 export default class LexicantApp extends Component {
   constructor(props) {
     super(props);
-    this.state = {word: '', prepend: '', append: '', hint: false};
+    this.state = {
+      word: '',
+      prepend: '',
+      append: '',
+      c_prepend: '',
+      c_append: '',
+      hint: false
+    };
     this.dictionary = dictionary
     this.appends = appends(dictionary)
     this.prepends = prepends(dictionary)
@@ -40,11 +47,13 @@ export default class LexicantApp extends Component {
           player = "You"
           prepend = {this.state.prepend}
           append = {this.state.append}
+          style = {styles.text}
         />
         <PlayMessage
           player = "Computer"
           prepend = {this.state.c_prepend}
           append = {this.state.c_append}
+          style = {styles.text}
         />
         {
           this.state.word === "" ? null :
@@ -128,7 +137,7 @@ export default class LexicantApp extends Component {
         return
       }
       if (this.dictionary.includes(next)) {
-        this.setState({message: 'player won with ' + next})
+        this.setState({message: 'you won with ' + next})
         this.setState({word: ''})
       } else {
         this.setState({word: next})
@@ -172,7 +181,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F5FCFF',
   },
   text: {
-    fontSize: 15,
+    fontSize: 20,
     textAlign: 'center',
     margin: 10,
   },

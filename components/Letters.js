@@ -37,16 +37,17 @@ const Letters = ({letters, onPrepend, onAppend, focusPrepend}) => {
 const styles = StyleSheet.create({
   view: {
     flexDirection: 'row',
-    height: 20,
+    height: 40,
   },
   text: {
     flex: 0,
-    fontSize: 15,
-    fontWeight: 'bold',
+    fontSize: 30,
   },
   input: {
     flex: 0,
     width: 30,
+    height: 50,
+    fontSize: 25,
   }
 });
 
