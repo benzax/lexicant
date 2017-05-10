@@ -6,32 +6,28 @@ import {
   View,
 } from 'react-native';
 import PropTypes from 'prop-types'
+import Appendum from './Appendum'
 
 const Letters = ({letters, onPrepend, onAppend, focusPrepend}) => {
-  let prepend = 
-    <TextInput
-      style = {styles.input}
-      value = ""
-      autoFocus = {focusPrepend || letters === ""}
-      onChangeText={(prepend) => onPrepend(prepend.toLowerCase())}
-    />
-  if (letters === "") {
-    return prepend
-  } else {
-    return (
-      <View style={styles.view}>
-        {prepend}
-        <Text style={styles.text}>
-          {letters}
-        </Text>
-        <TextInput
-          style = {styles.input}
-          autoFocus = {!focusPrepend}
-          value = ""
-          onChangeText={(append) => onAppend(append.toLowerCase())}
-        />
-      </View>
-  )}
+  return (
+    <View style={styles.view}>
+      <TextInput
+        ref = {(input) => { this.prependInput = input; }}
+        style = {styles.input}
+        value = ""
+        autoFocus = {focusPrepend || letters === ""}
+        onChangeText={(prepend) => onPrepend(prepend.toLowerCase())}
+      />
+      <Text style={styles.text}>
+        {letters}
+      </Text>
+      <Appendum
+        letters = {letters}
+        onAppend = {onAppend}
+        focusPrepend = {focusPrepend}
+      />
+    </View>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -55,6 +51,7 @@ Letters.propTypes = {
   letters: PropTypes.string.isRequired,
   onPrepend: PropTypes.func.isRequired,
   onAppend: PropTypes.func.isRequired,
+  focusPrepend: PropTypes.bool,
 }
 
 export default Letters
