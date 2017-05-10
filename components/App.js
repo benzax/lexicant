@@ -34,6 +34,7 @@ export default class LexicantApp extends Component {
           letters = {this.state.word}
           onPrepend = {this.onPrepend}
           onAppend = {this.onAppend}
+          focusPrepend = {this.state.append === ""}
         />
         <PlayMessage
           player = "You"
@@ -65,6 +66,9 @@ export default class LexicantApp extends Component {
   }
 
   onPrepend(letter) {
+    if (!letter.match(/[a-z]/i)) {
+      return
+    }
     this.setState({prepend: letter})
     this.setState({append: ''})
     let word = letter + this.state.word
@@ -72,6 +76,9 @@ export default class LexicantApp extends Component {
   }
   
   onAppend(letter) {
+    if (!letter.match(/[a-z]/i)) {
+      return
+    }
     this.setState({append: letter})
     this.setState({prepend: ''})
     let word = this.state.word + letter

@@ -7,12 +7,13 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types'
 
-const Letters = ({letters, onPrepend, onAppend}) => {
+const Letters = ({letters, onPrepend, onAppend, focusPrepend}) => {
   let prepend = 
     <TextInput
       style = {styles.input}
       value = ""
-      onChangeText={(prepend) => onPrepend(prepend)}
+      autoFocus = {focusPrepend || letters === ""}
+      onChangeText={(prepend) => onPrepend(prepend.toLowerCase())}
     />
   if (letters === "") {
     return prepend
@@ -25,8 +26,9 @@ const Letters = ({letters, onPrepend, onAppend}) => {
         </Text>
         <TextInput
           style = {styles.input}
+          autoFocus = {!focusPrepend}
           value = ""
-          onChangeText={(append) => onAppend(append)}
+          onChangeText={(append) => onAppend(append.toLowerCase())}
         />
       </View>
   )}
