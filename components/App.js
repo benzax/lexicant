@@ -88,20 +88,33 @@ export default class LexicantApp extends Component {
   play(word) {
     this.setState({hint: false})
     var next = ''
-    if (word.length > 3 && this.dictionary.includes(word)) {
+    if (this.dictionary.includes(word)) {
       this.setState({
         word: '',
         message: 'computer won with ' + word
       })
       this.computerAppend('')
     } else {
-      let apps = this.appends[word]
-      let preps = this.prepends[word]
-      if (apps && (!preps || Math.random() > .5)) {
+      let apps = this.appends[word] || []
+      let preps = this.prepends[word] || []
+      let safe_appends = apps.filter(
+          letter => !this.dictionary.includes(word + letter))
+      let safe_prepends = preps.filter(
+          letter => !this.dictionary.includes(letter + word))
+      if (safe_appends.length !== 0 &&
+          (safe_prepends.length === 0 || Math.random() > .5)) {
+        let move = safe_appends[Math.floor(Math.random()*safe_appends.length)]
+        next = word + move
+        this.computerAppend(move)
+      } else if (safe_prepends.length !== 0) {
+        let move = safe_prepends[Math.floor(Math.random()*safe_prepends.length)]
+        next = move + word
+        this.computerPrepend(move)
+      } else if (apps.length > 0) {
         let move = apps[Math.floor(Math.random()*apps.length)]
         next = word + move
         this.computerAppend(move)
-      } else if (preps) {
+      } else if (preps.length > 0) {
         let move = preps[Math.floor(Math.random()*preps.length)]
         next = move + word
         this.computerPrepend(move)
@@ -114,7 +127,7 @@ export default class LexicantApp extends Component {
         this.computerAppend('')
         return
       }
-      if (next.length > 3 && this.dictionary.includes(next)) { 
+      if (this.dictionary.includes(next)) {
         this.setState({message: 'player won with ' + next})
         this.setState({word: ''})
       } else {
@@ -134,7 +147,7 @@ export default class LexicantApp extends Component {
 
   completion(letters) {
     let word = letters
-    while (!this.dictionary.includes(word) || word.length < 4) {
+    while (!this.dictionary.includes(word)) {
       let apps = this.appends[word]
       let preps = this.prepends[word]
       if (apps && (!preps || Math.random() > .5)) {
