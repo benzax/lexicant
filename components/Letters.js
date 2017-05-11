@@ -6,25 +6,23 @@ import {
   View,
 } from 'react-native';
 import PropTypes from 'prop-types'
-import Appendum from './Appendum'
+import LetterInput from './LetterInput'
 
 const Letters = ({letters, onPrepend, onAppend, focusPrepend}) => {
   return (
     <View style={styles.view}>
-      <TextInput
-        ref = {(input) => { this.prependInput = input; }}
-        style = {styles.input}
-        value = ""
-        autoFocus = {focusPrepend || letters === ""}
-        onChangeText={(prepend) => onPrepend(prepend.toLowerCase())}
+      <LetterInput
+        letters = {letters}
+        focus = {focusPrepend}
+        onAdd = {onPrepend}
       />
       <Text style={styles.text}>
         {letters}
       </Text>
-      <Appendum
+      <LetterInput
         letters = {letters}
-        onAppend = {onAppend}
-        focusPrepend = {focusPrepend}
+        focus = {!focusPrepend}
+        onAdd = {onAppend}
       />
     </View>
   )
@@ -39,12 +37,6 @@ const styles = StyleSheet.create({
     flex: 0,
     fontSize: 30,
   },
-  input: {
-    flex: 0,
-    width: 30,
-    height: 50,
-    fontSize: 25,
-  }
 });
 
 Letters.propTypes = {

@@ -1,42 +1,38 @@
 import React from 'react'
 import {
   StyleSheet,
-  Text,
   TextInput,
-  View,
 } from 'react-native';
 import PropTypes from 'prop-types'
 
-const Appendum = ({letters, onAppend, focusPrepend, onHide}) => {
-  if (letters === "") {
+const LetterInput = ({letters, onAdd, focus}) => {
+  if (letters === "" && !focus) {
     return null
   } else {
     return (
       <TextInput
         style = {styles.input}
-        autoFocus = {!focusPrepend}
+        maxLength = {1}
+        autoFocus = {focus}
         value = ""
-        onChangeText={(append) => onAppend(append.toLowerCase())}
+        onChangeText={(letter) => onAdd(letter.toLowerCase())}
       />
   )}
 }
 
 const styles = StyleSheet.create({
-  text: {
-    flex: 0,
-    fontSize: 30,
-  },
   input: {
     flex: 0,
     width: 30,
     height: 50,
-    fontSize: 25,
+    fontSize: 30,
   }
 });
 
-Appendum.propTypes = {
+LetterInput.propTypes = {
   letters: PropTypes.string.isRequired,
-  onAppend: PropTypes.func.isRequired,
+  onAdd: PropTypes.func.isRequired,
+  focus: PropTypes.bool.isRequired,
 }
 
-export default Appendum
+export default LetterInput
