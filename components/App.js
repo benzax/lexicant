@@ -25,6 +25,8 @@ export default class LexicantApp extends Component {
       append: '',
       c_prepend: '',
       c_append: '',
+      wins: 0,
+      losses: 0,
       hint: false
     };
     this.dictionary = dictionary
@@ -74,6 +76,9 @@ export default class LexicantApp extends Component {
         <Text style={styles.text}>
           {this.state.message}{"\n"}
         </Text>
+        <Text style={styles.text}>
+          score: {this.state.wins} - {this.state.losses}
+        </Text>
       </View>
     );
   }
@@ -118,7 +123,8 @@ export default class LexicantApp extends Component {
     if (this.dictionary.includes(word)) {
       this.setState({
         word: '',
-        message: 'computer won with ' + word
+        message: 'computer won with ' + word,
+        losses: this.state.losses + 1,
       })
       this.computerAppend('')
     } else {
@@ -149,14 +155,18 @@ export default class LexicantApp extends Component {
         this.setState({
           message: 'computer challenged ' + word +
             '\ncomputer was thinking of ' + this.completion(this.state.word),
-          word: ''
+          word: '',
+          losses: this.state.losses + 1,
         })
         this.computerAppend('')
         return
       }
       if (this.dictionary.includes(next)) {
-        this.setState({message: 'you won with ' + next})
-        this.setState({word: ''})
+        this.setState({
+          message: 'you won with ' + next,
+          word: '',
+          wins: this.state.wins + 1,
+        })
       } else {
         this.setState({word: next})
         this.setState({message: ''})
