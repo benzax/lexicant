@@ -1,11 +1,9 @@
 const appends = (dictionary) => {
   let append = Object.create(null);
+  append[''] = 'abcdefghijklmnopqrstuvwxyz'.split('')
   for (var word of dictionary) {
-    if (word.length < 4) {
-      continue
-    }
     for (let i = 0; i < word.length; ++i) {
-      for (let j = i; j < word.length; ++j) {
+      for (let j = i+1; j < word.length; ++j) {
         let slice = word.slice(i, j)
         if (slice in append) {
           if (!append[slice].includes(word[j])) {

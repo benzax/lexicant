@@ -1,11 +1,9 @@
 const prepends = (dictionary) => {
   let prepend = Object.create(null);
+  prepend[''] = 'abcdefghijklmnopqrstuvwxyz'.split('')
   for (var word of dictionary) {
-    if (word.length < 4) {
-      continue
-    }
     for (let i = 0; i < word.length; ++i) {
-      for (let j = i; j < word.length; ++j) {
+      for (let j = i+1; j < word.length; ++j) {
         let slice = word.slice(i+1, j+1)
         if (slice in prepend) {
           if (!prepend[slice].includes(word[i])) {
