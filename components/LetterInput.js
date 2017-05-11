@@ -23,7 +23,7 @@ const LetterInput = ({letters, onAdd, focus}) => {
 const styles = StyleSheet.create({
   input: {
     flex: 0,
-    width: 30,
+    width: 35,
     height: 50,
     fontSize: 30,
   }
