@@ -32,6 +32,8 @@ export default class LexicantApp extends Component {
     this.prepends = prepends(dictionary)
     this.onPrepend = this.onPrepend.bind(this)
     this.onAppend = this.onAppend.bind(this)
+    this.prependInput = null
+    this.appendInput = null
   }
 
   render() {
@@ -42,6 +44,8 @@ export default class LexicantApp extends Component {
           onPrepend = {this.onPrepend}
           onAppend = {this.onAppend}
           focusPrepend = {this.state.append === ""}
+          registerPrepend = {(input) => this.prependInput = input}
+          registerAppend = {(input) => this.appendInput = input}
         />
         <PlayMessage
           player = "You"
@@ -76,20 +80,34 @@ export default class LexicantApp extends Component {
 
   onPrepend(letter) {
     if (!letter.match(/[a-z]/i)) {
+      if (letter === " ") {
+        if (this.appendInput) {
+          this.appendInput.focus()
+        }
+      }
       return
     }
-    this.setState({prepend: letter})
-    this.setState({append: ''})
+    this.setState({
+      prepend: letter,
+      append: '',
+    })
     let word = letter + this.state.word
     this.play(word)
   }
   
   onAppend(letter) {
     if (!letter.match(/[a-z]/i)) {
+      if (letter === " ") {
+        if (this.prependInput) {
+          this.prependInput.focus()
+        }
+      }
       return
     }
-    this.setState({append: letter})
-    this.setState({prepend: ''})
+    this.setState({
+      append: letter,
+      prepend: '',
+    })
     let word = this.state.word + letter
     this.play(word)
   }
