@@ -12,6 +12,7 @@ import {
 import dictionary from './../data/dictionary'
 import appends from './../reducers/appends'
 import prepends from './../reducers/prepends'
+import LetterBitMapTrie from './../trie/LetterBitMapTrie'
 import PlayMessage from './PlayMessage'
 import HintsMessage from './HintsMessage'
 import Letters from './Letters'
@@ -70,8 +71,8 @@ export default class LexicantApp extends Component {
         }
         <HintsMessage
           hint = {this.state.hint}
-          prepends = {this.prepends[this.state.word]}
-          appends = {this.appends[this.state.word]}
+          prepends = {this.prepends.get(this.state.word)}
+          appends = {this.appends.get(this.state.word)}
         />
         <Text style={styles.text}>
           {this.state.message}{"\n"}
@@ -128,8 +129,8 @@ export default class LexicantApp extends Component {
       })
       this.computerAppend('')
     } else {
-      let apps = this.appends[word] || []
-      let preps = this.prepends[word] || []
+      let apps = this.appends.get(word)
+      let preps = this.prepends.get(word)
       let safe_appends = apps.filter(
           letter => !this.dictionary.includes(word + letter))
       let safe_prepends = preps.filter(
@@ -185,12 +186,12 @@ export default class LexicantApp extends Component {
   completion(letters) {
     let word = letters
     while (!this.dictionary.includes(word)) {
-      let apps = this.appends[word]
-      let preps = this.prepends[word]
-      if (apps && (!preps || Math.random() > .5)) {
+      let apps = this.appends.get(word)
+      let preps = this.prepends.get(word)
+      if (apps.length !== 0 && (preps.length === 0 || Math.random() > .5)) {
         let move = apps[Math.floor(Math.random()*apps.length)]
         word = word + move
-      } else if (preps) {
+      } else if (preps.length !== 0) {
         let move = preps[Math.floor(Math.random()*preps.length)]
         word = move + word
       } else { // shouldn't get here
