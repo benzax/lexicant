@@ -12,6 +12,7 @@ import {
 import dictionary from './../data/dictionary'
 import appends from './../reducers/appends'
 import prepends from './../reducers/prepends'
+import randomChoice from './../random/choice'
 import LetterBitMapTrie from './../trie/LetterBitMapTrie'
 import PlayMessage from './PlayMessage'
 import HintsMessage from './HintsMessage'
@@ -137,19 +138,19 @@ export default class LexicantApp extends Component {
           letter => !this.dictionary.includes(letter + word))
       if (safe_appends.length !== 0 &&
           (safe_prepends.length === 0 || Math.random() > .5)) {
-        let move = safe_appends[Math.floor(Math.random()*safe_appends.length)]
+        let move = randomChoice(safe_appends)
         next = word + move
         this.computerAppend(move)
       } else if (safe_prepends.length !== 0) {
-        let move = safe_prepends[Math.floor(Math.random()*safe_prepends.length)]
+        let move = randomChoice(safe_prepends)
         next = move + word
         this.computerPrepend(move)
       } else if (apps.length > 0) {
-        let move = apps[Math.floor(Math.random()*apps.length)]
+        let move = randomChoice(apps)
         next = word + move
         this.computerAppend(move)
       } else if (preps.length > 0) {
-        let move = preps[Math.floor(Math.random()*preps.length)]
+        let move = randomChoice(preps)
         next = move + word
         this.computerPrepend(move)
       } else {
@@ -189,10 +190,10 @@ export default class LexicantApp extends Component {
       let apps = this.appends.get(word)
       let preps = this.prepends.get(word)
       if (apps.length !== 0 && (preps.length === 0 || Math.random() > .5)) {
-        let move = apps[Math.floor(Math.random()*apps.length)]
+        let move = randomChoice(apps)
         word = word + move
       } else if (preps.length !== 0) {
-        let move = preps[Math.floor(Math.random()*preps.length)]
+        let move = randomChoice(preps)
         word = move + word
       } else { // shouldn't get here
         return "letters"
