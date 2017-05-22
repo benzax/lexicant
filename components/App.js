@@ -31,7 +31,7 @@ export default class LexicantApp extends Component {
       losses: 0,
       hint: false
     };
-    this.dictionary = dictionary
+    this.dictionary = new Set(dictionary)
     this.appends = appends(dictionary)
     this.prepends = prepends(dictionary)
     this.onPrepend = this.onPrepend.bind(this)
@@ -122,7 +122,7 @@ export default class LexicantApp extends Component {
   play(word) {
     this.setState({hint: false})
     var next = ''
-    if (this.dictionary.includes(word)) {
+    if (this.dictionary.has(word)) {
       this.computerAppend('')
       this.resetGame({
         word: '',
@@ -133,9 +133,9 @@ export default class LexicantApp extends Component {
       let apps = this.appends.get(word)
       let preps = this.prepends.get(word)
       let safe_appends = apps.filter(
-          letter => !this.dictionary.includes(word + letter))
+          letter => !this.dictionary.has(word + letter))
       let safe_prepends = preps.filter(
-          letter => !this.dictionary.includes(letter + word))
+          letter => !this.dictionary.has(letter + word))
       if (safe_appends.length !== 0 &&
           (safe_prepends.length === 0 || Math.random() > .5)) {
         let move = randomChoice(safe_appends)
@@ -163,7 +163,7 @@ export default class LexicantApp extends Component {
         })
         return
       }
-      if (this.dictionary.includes(next)) {
+      if (this.dictionary.has(next)) {
         this.resetGame({
           message: 'you won with ' + next,
           word: '',
@@ -197,7 +197,7 @@ export default class LexicantApp extends Component {
 
   completion(letters) {
     let word = letters
-    while (!this.dictionary.includes(word)) {
+    while (!this.dictionary.has(word)) {
       let apps = this.appends.get(word)
       let preps = this.prepends.get(word)
       if (apps.length !== 0 && (preps.length === 0 || Math.random() > .5)) {
