@@ -123,12 +123,12 @@ export default class LexicantApp extends Component {
     this.setState({hint: false})
     var next = ''
     if (this.dictionary.includes(word)) {
-      this.setState({
+      this.computerAppend('')
+      this.resetGame({
         word: '',
         message: 'computer won with ' + word,
         losses: this.state.losses + 1,
       })
-      this.computerAppend('')
     } else {
       let apps = this.appends.get(word)
       let preps = this.prepends.get(word)
@@ -154,17 +154,17 @@ export default class LexicantApp extends Component {
         next = move + word
         this.computerPrepend(move)
       } else {
-        this.setState({
+        this.computerAppend('')
+        this.resetGame({
           message: 'computer challenged ' + word +
             '\ncomputer was thinking of ' + this.completion(this.state.word),
           word: '',
           losses: this.state.losses + 1,
         })
-        this.computerAppend('')
         return
       }
       if (this.dictionary.includes(next)) {
-        this.setState({
+        this.resetGame({
           message: 'you won with ' + next,
           word: '',
           wins: this.state.wins + 1,
@@ -182,6 +182,17 @@ export default class LexicantApp extends Component {
 
   computerAppend(letter) {
     this.setState({c_prepend: '', c_append: letter})
+  }
+
+  resetGame(newState) {
+    if ((this.state.wins + this.state.losses) % 2 == 0) {
+      letter = randomChoice(this.appends.get(""))
+      newState['word'] = letter
+      newState['c_prepend'] = letter
+      newState['append'] = ''
+      newState['prepend'] = ''
+    }
+    this.setState(newState)
   }
 
   completion(letters) {
