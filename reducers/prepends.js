@@ -1,8 +1,5 @@
-import LetterBitMapTrie from './../trie/LetterBitMapTrie'
-
-const prepends = (dictionary) => {
-  let prepend = new LetterBitMapTrie()
-  prepend.addAll('')
+const prepends = (dictionary, trie) => {
+  let prepend = trie.prepend()
 
   for (var word of dictionary) {
     for (let i = 0; i < word.length; ++i) {

@@ -1,8 +1,5 @@
-import LetterBitMapTrie from './../trie/LetterBitMapTrie'
-
-const appends = (dictionary) => {
-  let append = new LetterBitMapTrie()
-  append.addAll('')
+const appends = (dictionary, trie) => {
+  let append = trie.append()
 
   for (var word of dictionary) {
     for (let i = 0; i < word.length; ++i) {

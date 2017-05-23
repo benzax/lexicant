@@ -32,8 +32,9 @@ export default class LexicantApp extends Component {
       hint: false
     };
     this.dictionary = new Set(dictionary)
-    this.appends = appends(dictionary)
-    this.prepends = prepends(dictionary)
+    this.trie = new LetterBitMapTrie()
+    this.appends = appends(dictionary, this.trie)
+    this.prepends = prepends(dictionary, this.trie)
     this.onPrepend = this.onPrepend.bind(this)
     this.onAppend = this.onAppend.bind(this)
     this.prependInput = null
