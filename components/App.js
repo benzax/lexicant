@@ -125,6 +125,7 @@ export default class LexicantApp extends Component {
     var next = ''
     if (this.dictionary.has(word)) {
       this.computerAppend('')
+      this.uproot(word)
       this.resetGame({
         word: '',
         message: 'computer won with ' + word,
@@ -156,15 +157,18 @@ export default class LexicantApp extends Component {
         this.computerPrepend(move)
       } else {
         this.computerAppend('')
+        let completion = this.completion(this.state.word)
+        this.uproot(completion)
         this.resetGame({
           message: 'computer challenged ' + word +
-            '\ncomputer was thinking of ' + this.completion(this.state.word),
+            '\ncomputer was thinking of ' + completion,
           word: '',
           losses: this.state.losses + 1,
         })
         return
       }
       if (this.dictionary.has(next)) {
+        this.uproot(next)
         this.resetGame({
           message: 'you won with ' + next,
           word: '',
@@ -194,6 +198,28 @@ export default class LexicantApp extends Component {
       newState['prepend'] = ''
     }
     this.setState(newState)
+  }
+
+  uproot(word) {
+    this.dictionary.delete(word)
+    this.uprootRecursively(word)
+  }
+
+  uprootRecursively(letters) {
+    if (!this.dictionary.has(letters) && !this.trie.hasExtensions(letters)) {
+      this.uprootPrefix(letters.slice(1), letters.slice(0,1))
+      this.uprootSuffix(letters.slice(0,-1), letters.slice(-1))
+    }
+  }
+
+  uprootPrefix(letters, prefix) {
+    this.trie.removePrefix(letters, prefix)
+    this.uprootRecursively(letters)
+  }
+
+  uprootSuffix(letters, suffix) {
+    this.trie.removeSuffix(letters, suffix)
+    this.uprootRecursively(letters)
   }
 
   completion(letters) {
