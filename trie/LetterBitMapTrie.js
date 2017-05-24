@@ -1,6 +1,29 @@
+/*
+*
+* keys are substrings of dictionary words
+* entries are 3-tuples
+*   [0] is integer bitset marking valid prepends
+*   [1] is integer bitset marking valid appends
+*   [2] is +1 if the player who just played wins, else -1
+*
+* unplayable strings either aren't in the table, or map to [0, 0, 0]
+*
+* example: suppose the dictionary is ["abc", "abba"] (and length 3 words count)
+* map = {
+*   a   : [b], [b], win
+*   b   : [a, b], [a, b, c], loss
+*   c   : [b], [], loss
+*   ab  : [], [b, c], loss
+*   ba  : [b], [], loss
+*   bb  : [a], [a], loss
+*   bc  : [a], [], win
+*   abb : [], [a], win
+*   bba : [a], [], win
+*/
 class LetterBitMapTrie {
-  constructor() {
+  constructor(dictionary) {
     this.map = Object.create(null)
+    this.dictionary = dictionary
     this.letters = 'abcdefghijklmnopqrstuvwxyz'
     this.addAll('')
     this.removePrefix = this.remove.bind(this, 0)
@@ -23,6 +46,7 @@ class LetterBitMapTrie {
 
   remove(view, key, value) {
     this.map[key][view] &= ~(1 << (value.charCodeAt(0) - 97))
+    this.map[key][2] = 0
   }
 
   hasExtensions(key) {
@@ -35,7 +59,7 @@ class LetterBitMapTrie {
   // value is lowercase letter
   add(view, key, value) {
     if (!this.map[key]) {
-      this.map[key] = [0, 0]
+      this.map[key] = [0, 0, 0]
     }
     this.map[key][view] |= (1 << (value.charCodeAt(0) - 97))
   }
@@ -54,7 +78,55 @@ class LetterBitMapTrie {
   }
   
   addAll(key) {
-    this.map[key] = [(1 << 26) - 1, (1 << 26) - 1]
+    this.map[key] = [(1 << 26) - 1, (1 << 26) - 1, 0]
+  }
+
+  perfectPlay(letters) {
+    if (!this.map[letters]) {
+      return -1
+    }
+    if (this.map[letters][2] === 0) {
+      this.map[letters][2] = this.computePerfectPlay(letters)
+    }
+    return this.map[letters][2]
+  }
+
+  // lazily compute perfect play
+  computePerfectPlay(letters) {
+    if (this.dictionary.has(letters)) {
+      return -1
+    }
+
+    let prepends = this.get(0, letters)
+    for (var p of prepends) {
+      if (this.perfectPlay(p + letters) === 1) {
+        return -1
+      }
+    }
+    let appends = this.get(1, letters)
+    for (var a of appends) {
+      if (this.perfectPlay(letters + a) === 1) {
+        return -1
+      }
+    }
+
+    return 1
+  }
+
+  recomputeWinner(letters) {
+    let previous = this.map[letters][2]
+    this.map[letters][2] = 0
+    let updated = this.computePerfectPlay(letters)
+    if (previous !== updated && letters !== "") {
+      this.recomputeWinner(letters.slice(1))
+      this.recomputeWinner(letters.slice(0, -1))
+    }
+  }
+
+  winningStarts() {
+    let letters = this.letters.split("")
+    let wins = letters.filter(letter => this.perfectPlay(letter) == 1)
+    return (wins.length > 0) ? wins : letters
   }
 }
 

@@ -32,9 +32,10 @@ export default class LexicantApp extends Component {
       hint: false
     };
     this.dictionary = new Set(dictionary)
-    this.trie = new LetterBitMapTrie()
+    this.trie = new LetterBitMapTrie(this.dictionary)
     this.appends = appends(dictionary, this.trie)
     this.prepends = prepends(dictionary, this.trie)
+    this.trie.computePerfectPlay('')
     this.onPrepend = this.onPrepend.bind(this)
     this.onAppend = this.onAppend.bind(this)
     this.prependInput = null
@@ -134,11 +135,27 @@ export default class LexicantApp extends Component {
     } else {
       let apps = this.appends.get(word)
       let preps = this.prepends.get(word)
+
+      let winning_appends = apps.filter(
+          letter => this.trie.perfectPlay(word + letter) === 1)
+      let winning_prepends = preps.filter(
+          letter => this.trie.perfectPlay(letter + word) === 1)
+
       let safe_appends = apps.filter(
           letter => !this.dictionary.has(word + letter))
       let safe_prepends = preps.filter(
           letter => !this.dictionary.has(letter + word))
-      if (safe_appends.length !== 0 &&
+
+      if (winning_appends.length !== 0 &&
+          (winning_prepends.length === 0 || Math.random() > .5)) {
+        let move = randomChoice(winning_appends)
+        next = word + move
+        this.computerAppend(move)
+      } else if (winning_prepends.length !== 0) {
+        let move = randomChoice(winning_prepends)
+        next = move + word
+        this.computerPrepend(move)
+      } else if (safe_appends.length !== 0 &&
           (safe_prepends.length === 0 || Math.random() > .5)) {
         let move = randomChoice(safe_appends)
         next = word + move
@@ -191,7 +208,7 @@ export default class LexicantApp extends Component {
 
   resetGame(newState) {
     if ((this.state.wins + this.state.losses) % 2 == 0) {
-      letter = randomChoice(this.appends.get(""))
+      letter = randomChoice(this.trie.winningStarts())
       newState['word'] = letter
       newState['c_prepend'] = letter
       newState['append'] = ''
@@ -209,6 +226,8 @@ export default class LexicantApp extends Component {
     if (!this.dictionary.has(letters) && !this.trie.hasExtensions(letters)) {
       this.uprootPrefix(letters.slice(1), letters.slice(0,1))
       this.uprootSuffix(letters.slice(0,-1), letters.slice(-1))
+    } else {
+      this.trie.recomputeWinner(letters)
     }
   }
 
