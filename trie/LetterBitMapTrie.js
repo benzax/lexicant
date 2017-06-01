@@ -28,6 +28,37 @@ class LetterBitMapTrie {
     this.addAll('')
     this.removePrefix = this.remove.bind(this, 0)
     this.removeSuffix = this.remove.bind(this, 1)
+    this.computePlays()
+  }
+
+  computePlays() {
+    this.computePrepends()
+    this.computeAppends()
+    this.computePerfectPlay('')
+  }
+
+  computePrepends() {
+    let prepend = this.prepend()
+    for (var word of this.dictionary) {
+      for (let i = 0; i < word.length; ++i) {
+        for (let j = i+1; j < word.length; ++j) {
+          let slice = word.slice(i+1, j+1)
+          prepend.add(slice, word[i])
+        }
+      }
+    }
+  }
+
+  computeAppends() {
+    let append = this.append()
+    for (var word of this.dictionary) {
+      for (let i = 0; i < word.length; ++i) {
+        for (let j = i+1; j < word.length; ++j) {
+          let slice = word.slice(i, j)
+          append.add(slice, word[j])
+        }
+      }
+    }
   }
 
   prepend() {

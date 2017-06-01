@@ -10,8 +10,6 @@ import {
   View
 } from 'react-native';
 import dictionary from './../data/dictionary'
-import appends from './../reducers/appends'
-import prepends from './../reducers/prepends'
 import randomChoice from './../random/choice'
 import LetterBitMapTrie from './../trie/LetterBitMapTrie'
 import PlayMessage from './PlayMessage'
@@ -33,9 +31,8 @@ export default class LexicantApp extends Component {
     };
     this.dictionary = new Set(dictionary)
     this.trie = new LetterBitMapTrie(this.dictionary)
-    this.appends = appends(dictionary, this.trie)
-    this.prepends = prepends(dictionary, this.trie)
-    this.trie.computePerfectPlay('')
+    this.appends = this.trie.append()
+    this.prepends = this.trie.prepend()
     this.onPrepend = this.onPrepend.bind(this)
     this.onAppend = this.onAppend.bind(this)
     this.prependInput = null
