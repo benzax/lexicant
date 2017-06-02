@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Text,
   Button,
+  KeyboardAvoidingView,
   View
 } from 'react-native';
 import dictionary from './../data/dictionary'
@@ -41,7 +42,7 @@ export default class LexicantApp extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <KeyboardAvoidingView behavior='height' style={styles.container}>
         <Letters 
           letters = {this.state.word}
           onPrepend = {this.onPrepend}
@@ -80,7 +81,7 @@ export default class LexicantApp extends Component {
         <Text style={styles.text}>
           score: {this.state.wins} - {this.state.losses}
         </Text>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 
