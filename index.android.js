@@ -7,6 +7,6 @@ import {
   AppRegistry,
 } from 'react-native';
 
-import LexicantApp from './components/App' 
+import Lexicant from './components/App'
 
-AppRegistry.registerComponent('LexicantApp', () => LexicantApp);
+AppRegistry.registerComponent('Lexicant', () => Lexicant);

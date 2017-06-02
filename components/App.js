@@ -1,5 +1,5 @@
 /**
- * Lexicant App
+ * Lexicant
  */
 
 import React, { Component } from 'react';
@@ -17,7 +17,7 @@ import PlayMessage from './PlayMessage'
 import HintsMessage from './HintsMessage'
 import Letters from './Letters'
 
-export default class LexicantApp extends Component {
+export default class Lexicant extends Component {
   constructor(props) {
     super(props);
     this.state = {

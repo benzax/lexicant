@@ -1,4 +1,4 @@
-package com.lexicantapp;
+package com.lexicant;
 
 import android.app.Application;
 
